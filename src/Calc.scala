@@ -1,11 +1,21 @@
-import java.io.InputStreamReader
+import java.io.{InputStreamReader, BufferedReader, StringReader}
 
 @main def Calc() = {
-    val reader = InputStreamReader(System.in)
-    val scanner = CalcScanner(reader)
-    while scanner.hasNext do
-        val tok = scanner.next()
-        println(tok)
-    
+    val reader = BufferedReader(InputStreamReader(System.in))
+
+    var line = reader.readLine()
+    while line != null && line != "" do
+        val strReader = StringReader(line)
+        val scanner = CalcScanner(strReader)
+        val parser = CalcParser()
+        parser.yyreset(scanner)
+        val success = parser.yyparse()
+        if success then
+            println("Result: " + parser.result)
+            println("Numbers: " + parser.nums)
+        else
+            println("Parsing error")
+        line = reader.readLine()
+
     reader.close()
 }
