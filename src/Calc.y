@@ -20,32 +20,31 @@ expr -> expr "+" expr
 %left PLUS MINUS
 %left TIMES DIV
 
-%type<Int> expr
+%type<Expr> expr
 
 %%
 
   /* Grammar */
 
 program: expr {
-    result = $1
+    tree = $1
 }
 ;
 
 expr: expr PLUS expr {
-    $$ = $1 + $3
+    $$ = EBinOp(CalcTokens.PLUS(), $1, $3)
 }
 | expr MINUS expr {
-    $$ = $1 - $3
+    $$ = EBinOp(CalcTokens.MINUS(), $1, $3)
 }
 | expr TIMES expr {
-    $$ = $1 * $3
+    $$ = EBinOp(CalcTokens.TIMES(), $1, $3)
 }
 | expr DIV expr {
-    $$ = $1 / $3
+    $$ = EBinOp(CalcTokens.DIV(), $1, $3)
 }
 | NUM {
-    nums = $1 :: nums
-    $$ = $1
+    $$ = ENum($1)
 }
 | LPAREN expr RPAREN {
     $$ = $2
@@ -53,5 +52,4 @@ expr: expr PLUS expr {
 ;
 %%
   def yyerror(msg: String) = { };
-  var result: Int = 0;
-  var nums = List[Int]();
+  var tree: Expr = null;

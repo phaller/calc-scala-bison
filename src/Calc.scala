@@ -11,8 +11,7 @@ import java.io.{InputStreamReader, BufferedReader, StringReader}
         parser.yyreset(scanner)
         val success = parser.yyparse()
         if success then
-            println("Result: " + parser.result)
-            println("Numbers: " + parser.nums)
+            println("Tree: " + parser.tree)
         else
             println("Parsing error")
         line = reader.readLine()
