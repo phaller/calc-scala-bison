@@ -49,7 +49,7 @@ class CalcScanner(reader: Reader) extends Iterator[YYToken] {
                 NUM(0)
             else if Character.isDigit(char) then
                 var k = 0
-                while currentChar.nonEmpty && Character.isDigit(currentChar.get) do
+                while currentChar.nonEmpty && currentChar.get.toInt >= 48 && currentChar.get.toInt <= 57 do
                     k = 10 * k + ("" + currentChar.get).toInt
                     nextChar()
                 NUM(k)
