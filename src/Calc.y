@@ -17,12 +17,40 @@ expr -> expr "+" expr
 %token LPAREN
 %token RPAREN
 
+%left PLUS MINUS
+%left TIMES DIV
+
+%type<Expr> expr
+
 %%
 
 /* Grammar */
 
-program:
+program: expr {
+  result = $1
+}
+;
+
+expr: expr PLUS expr {
+  $$ = EBinOp(CalcTokens.PLUS(), $1, $3)
+}
+| expr MINUS expr {
+  $$ = EBinOp(CalcTokens.MINUS(), $1, $3)
+}
+| expr TIMES expr {
+  $$ = EBinOp(CalcTokens.TIMES(), $1, $3)
+}
+| expr DIV expr {
+  $$ = EBinOp(CalcTokens.DIV(), $1, $3)
+}
+| LPAREN expr RPAREN {
+  $$ = $2
+}
+| NUM {
+  $$ = ENum($1)
+}
 ;
 
 %%
-  def yyerror(msg: String): Unit = { }
+  def yyerror(msg: String): Unit = { };
+  var result: Expr = null;

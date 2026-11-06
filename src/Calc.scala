@@ -7,9 +7,15 @@ import java.io.{InputStreamReader, BufferedReader, StringReader}
     while line != null && line != "" do
         val strReader = StringReader(line)
         val scanner = CalcScanner(strReader)
-        while scanner.hasNext do
-            val tok = scanner.next()
-            print("" + tok + " ")
+
+        val parser = CalcParser()
+        parser.yyreset(scanner)
+        val success = parser.yyparse()
+        if success then
+            println("Success")
+            println(s"Result: ${parser.result}")
+        else
+            println("Error")
         line = reader.readLine()
 
     reader.close()
